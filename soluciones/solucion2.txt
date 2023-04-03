@@ -1,0 +1,42 @@
+xquery version "3.1";
+
+<html>
+    <head>
+        <style>
+            table, th, td {{ border: 1px solid black; }}
+        </style>
+    </head>
+    <body>
+{
+    let $grupo := "DAW1"
+    return
+        <h1>Notas medias de {$grupo}</h1>
+}
+        <table>
+            <tr>
+                <th>Asignatura</th>
+                <th>Media</th>
+                <th>Profesor</th>
+            </tr>
+{
+    let $grupo := "DAW1"
+    for $registro in doc("/db/demo23/notas.xml")//registro
+    let $modulo := data($registro/modulo)
+    where data($registro/grupo) = $grupo
+    group by $modulo
+    let $media := round(avg($registro/nota),1)
+    order by $media descending
+    return 
+            <tr>
+                <td>{$modulo}</td>
+                <td>{$media}</td>
+                {
+                    let $asignatura := concat(distinct-values($grupo),"-",$modulo)
+                    let $profe := doc("/db/demo23/profes.xml")//registro[asignatura=$asignatura]
+                    return <td>{concat($profe/nombre, " ", $profe/apellido)}</td>
+                }
+            </tr>
+}
+        </table>
+    </body>
+</html>

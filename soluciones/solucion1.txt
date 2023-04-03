@@ -1,0 +1,49 @@
+xquery version "3.1";
+
+<html>
+    <head><style> table, th, td {{ border: 1px solid black; }} </style></head>
+    <body>
+{
+    let $nombreEstudiante := "Samantha"
+    let $apellidoEstudiante := "Oag"
+    let $grupoEstudiante := distinct-values(doc("/db/demo23/notas.xml")//registro[nombre=$nombreEstudiante][apellido=$apellidoEstudiante]/grupo)
+    return
+        <h1>Notas medias del/a estudiante <br/> 
+            {concat($nombreEstudiante, " ", $apellidoEstudiante, " (", $grupoEstudiante, ")")}
+        </h1>
+}
+        <table>
+            <tr>
+                <th>Modulo</th>
+                <th>Media</th>
+                <th>Nota</th>
+                <th>Dif</th>
+            </tr>
+{
+    let $nombreEstudiante := "Samantha"
+    let $apellidoEstudiante := "Oag"
+    for $registro in doc("/db/demo23/notas.xml")//registro
+    let $modulo := data($registro/modulo)
+    let $grupo := data($registro/grupo)
+    let $nota := data($registro/nota)
+    where $registro/nombre = $nombreEstudiante and $registro/apellido = $apellidoEstudiante
+    order by $nota descending
+    return 
+            <tr>
+                <td>{$modulo}</td>
+                {
+                    let $media := round(avg(doc("/db/demo23/notas.xml")//registro[modulo=$modulo][grupo=$grupo]/nota),2)
+                    return <td>{$media}</td>
+                }
+                <td>{$nota}</td>
+                {
+                    let $media := round(avg(doc("/db/demo23/notas.xml")//registro[modulo=$modulo][grupo=$grupo]/nota),2)
+                    return  if ($media <= $nota) then <td>+</td>
+                            else <td>-</td>
+                }
+                
+            </tr>
+}
+        </table>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+xquery version "3.1";
+
+<html>
+    <head><style> table, th, td {{ border: 1px solid black; }} </style></head>
+    <body>
+{
+    let $nombreEstudiante := "Samantha"
+    let $apellidoEstudiante := "Oag"
+    let $grupoEstudiante := distinct-values(doc("/db/demo23/notas.xml")//registro[nombre=$nombreEstudiante][apellido=$apellidoEstudiante]/grupo)
+    return
+        <h1>Notas medias del/a estudiante <br/> 
+            {concat($nombreEstudiante, " ", $apellidoEstudiante, " (", $grupoEstudiante, ")")}
+        </h1>
+}
+        <table>
+            <tr>
+                <th>Modulo</th>
+                <th>Media</th>
+                <th>Nota</th>
+                <th>Dif</th>
+            </tr>
+{
+    (: TODO: ejercicio1 :)
+}
+        </table>
+    </body>
+</html>

@@ -1,0 +1,26 @@
+xquery version "3.1";
+
+<html>
+    <head>
+        <style>
+            table, th, td {{ border: 1px solid black; }}
+        </style>
+    </head>
+    <body>
+{
+    let $grupo := "DAW1"
+    return
+        <h1>Notas medias de {$grupo}</h1>
+}
+        <table>
+            <tr>
+                <th>Asignatura</th>
+                <th>Media</th>
+                <th>Profesor</th>
+            </tr>
+{
+    (: TODO: ejercicio2 :)
+}
+        </table>
+    </body>
+</html>
